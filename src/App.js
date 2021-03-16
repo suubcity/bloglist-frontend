@@ -1,5 +1,9 @@
 import React, { useState, useEffect } from 'react';
+import style from './style.css';
+//components
+import Notification from './components/Notification';
 import Blog from './components/Blog';
+//services
 import blogsService from './services/blogs';
 import loginService from './services/login';
 
@@ -14,6 +18,10 @@ const App = () => {
 	const [author, setAuthor] = useState('');
 	const [url, setUrl] = useState('');
 	const [likes, setLikes] = useState('');
+
+	//Notification states
+	const [error, setError] = useState(null);
+	const [notification, setNotification] = useState(null);
 
 	useEffect(() => {
 		blogsService.getAll().then((blogs) => setBlogs(blogs));
@@ -30,7 +38,7 @@ const App = () => {
 	//event handlers
 	const handleLogin = async (e) => {
 		e.preventDefault();
-		console.log('logging in ', username);
+
 		try {
 			const user = await loginService.login(username, password);
 
@@ -39,11 +47,15 @@ const App = () => {
 			blogsService.setToken(user.token);
 			setUsername('');
 			setPassword('');
-		} catch (exception) {}
+			setNotificationWithTimeout(`${user.name} logged in.`);
+		} catch (exception) {
+			setErrorWithTimeout('Wrong username or password');
+		}
 	};
 
 	const handleLogout = (e) => {
 		window.localStorage.removeItem('loggedInUser');
+		setNotificationWithTimeout(`${user.name} logged out`);
 		setUser(null);
 	};
 
@@ -58,6 +70,7 @@ const App = () => {
 		const returnedBlog = await blogsService.create(newBlog);
 
 		setBlogs(blogs.concat(returnedBlog));
+		setNotificationWithTimeout(`${newBlog.title} saved to database.`);
 		clearBlogForm();
 	};
 
@@ -67,6 +80,16 @@ const App = () => {
 		setAuthor('');
 		setUrl('');
 		setLikes('');
+	};
+
+	const setNotificationWithTimeout = (message) => {
+		setNotification(message);
+		setTimeout(() => setNotification(null), 5000);
+	};
+
+	const setErrorWithTimeout = (message) => {
+		setError(message);
+		setTimeout(() => setError(null), 5000);
 	};
 
 	//components
@@ -133,8 +156,15 @@ const App = () => {
 		</form>
 	);
 
+	const errorDiv = (message) => <div className="error">{message}</div>;
+
 	//layout
-	return <div>{user === null ? loginForm() : mainPage()} </div>;
+	return (
+		<div>
+			<Notification notification={notification} error={error} />
+			{user === null ? loginForm() : mainPage()}{' '}
+		</div>
+	);
 };
 
 export default App;
