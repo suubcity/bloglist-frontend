@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Blog from './components/Blog';
-import blogService from './services/blogs';
+import blogsService from './services/blogs';
 import loginService from './services/login';
 
 const App = () => {
@@ -9,8 +9,14 @@ const App = () => {
 	const [password, setPassword] = useState('');
 	const [user, setUser] = useState(null);
 
+	//blogForm states
+	const [title, setTitle] = useState('');
+	const [author, setAuthor] = useState('');
+	const [url, setUrl] = useState('');
+	const [likes, setLikes] = useState('');
+
 	useEffect(() => {
-		blogService.getAll().then((blogs) => setBlogs(blogs));
+		blogsService.getAll().then((blogs) => setBlogs(blogs));
 	}, []);
 
 	useEffect(() => {
@@ -18,9 +24,10 @@ const App = () => {
 		if (loggedUserJSON) {
 			const user = JSON.parse(loggedUserJSON);
 			setUser(user);
+			blogsService.setToken(user.token);
 		}
-	});
-
+	}, []);
+	//event handlers
 	const handleLogin = async (e) => {
 		e.preventDefault();
 		console.log('logging in ', username);
@@ -29,6 +36,7 @@ const App = () => {
 
 			window.localStorage.setItem('loggedInUser', JSON.stringify(user));
 			setUser(user);
+			blogsService.setToken(user.token);
 			setUsername('');
 			setPassword('');
 		} catch (exception) {}
@@ -39,6 +47,29 @@ const App = () => {
 		setUser(null);
 	};
 
+	const handleAddBlog = async (e) => {
+		e.preventDefault();
+		const newBlog = {
+			title,
+			author,
+			url,
+			likes,
+		};
+		const returnedBlog = await blogsService.create(newBlog);
+
+		setBlogs(blogs.concat(returnedBlog));
+		clearBlogForm();
+	};
+
+	//helper functions
+	const clearBlogForm = () => {
+		setTitle('');
+		setAuthor('');
+		setUrl('');
+		setLikes('');
+	};
+
+	//components
 	const loginForm = () => (
 		<form>
 			<div>
@@ -65,9 +96,10 @@ const App = () => {
 		</form>
 	);
 
-	const loggedInPage = () => (
+	const mainPage = () => (
 		<div>
 			<h2>blogs</h2>
+			{blogForm()}
 			<h3>
 				{user.name} logged in. <button onClick={handleLogout}>Log Out</button>
 			</h3>
@@ -77,7 +109,32 @@ const App = () => {
 		</div>
 	);
 
-	return <div>{user === null ? loginForm() : loggedInPage()} </div>;
+	const blogForm = () => (
+		<form>
+			<div>
+				Title
+				<input type="text" value={title} name="Title" onChange={({ target }) => setTitle(target.value)} />
+			</div>
+			<div>
+				Author
+				<input type="text" name="Author" value={author} onChange={({ target }) => setAuthor(target.value)} />
+			</div>
+			<div>
+				Url
+				<input type="text" name="Url" value={url} onChange={({ target }) => setUrl(target.value)} />
+			</div>
+			<div>
+				Likes
+				<input type="text" name="Likes" value={likes} onChange={({ target }) => setLikes(target.value)} />
+			</div>
+			<button type="submit" onClick={handleAddBlog}>
+				Add Blog
+			</button>
+		</form>
+	);
+
+	//layout
+	return <div>{user === null ? loginForm() : mainPage()} </div>;
 };
 
 export default App;
