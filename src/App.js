@@ -4,6 +4,7 @@ import style from './style.css';
 import Notification from './components/Notification';
 import Blog from './components/Blog';
 import Togglable from './components/Togglable';
+import BlogForm from './components/BlogForm';
 //services
 import blogsService from './services/blogs';
 import loginService from './services/login';
@@ -13,12 +14,6 @@ const App = () => {
 	const [username, setUsername] = useState('');
 	const [password, setPassword] = useState('');
 	const [user, setUser] = useState(null);
-
-	//blogForm states
-	const [title, setTitle] = useState('');
-	const [author, setAuthor] = useState('');
-	const [url, setUrl] = useState('');
-	const [likes, setLikes] = useState('');
 
 	//Notification states
 	const [error, setError] = useState(null);
@@ -37,9 +32,7 @@ const App = () => {
 		}
 	}, []);
 	//event handlers
-	const handleLogin = async (e) => {
-		e.preventDefault();
-
+	const handleLogin = async () => {
 		try {
 			const user = await loginService.login(username, password);
 
@@ -60,28 +53,14 @@ const App = () => {
 		setUser(null);
 	};
 
-	const handleAddBlog = async (e) => {
-		e.preventDefault();
-		const newBlog = {
-			title,
-			author,
-			url,
-			likes,
-		};
+	const handleAddBlog = async (newBlog) => {
 		const returnedBlog = await blogsService.create(newBlog);
 
 		setBlogs(blogs.concat(returnedBlog));
 		setNotificationWithTimeout(`${newBlog.title} saved to database.`);
-		clearBlogForm();
 	};
 
 	//helper functions
-	const clearBlogForm = () => {
-		setTitle('');
-		setAuthor('');
-		setUrl('');
-		setLikes('');
-	};
 
 	const setNotificationWithTimeout = (message) => {
 		setNotification(message);
@@ -135,32 +114,7 @@ const App = () => {
 
 	const blogForm = () => (
 		<Togglable buttonLabel={'Add blog'}>
-			<form>
-				<div>
-					Title
-					<input type="text" value={title} name="Title" onChange={({ target }) => setTitle(target.value)} />
-				</div>
-				<div>
-					Author
-					<input
-						type="text"
-						name="Author"
-						value={author}
-						onChange={({ target }) => setAuthor(target.value)}
-					/>
-				</div>
-				<div>
-					Url
-					<input type="text" name="Url" value={url} onChange={({ target }) => setUrl(target.value)} />
-				</div>
-				<div>
-					Likes
-					<input type="text" name="Likes" value={likes} onChange={({ target }) => setLikes(target.value)} />
-				</div>
-				<button type="submit" onClick={handleAddBlog}>
-					Save Blog
-				</button>
-			</form>
+			<BlogForm handleAddBlog={handleAddBlog} />
 		</Togglable>
 	);
 
