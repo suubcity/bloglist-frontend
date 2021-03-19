@@ -122,7 +122,7 @@ const App = () => {
 
 	//layout
 	return (
-		<div>
+		<div id="app">
 			<Notification notification={notification} error={error} />
 			{user === null ? loginForm() : mainPage()}{' '}
 		</div>

@@ -1,3 +1,44 @@
+/*#region css reset*/
+html {
+    box-sizing: border-box;
+    font-size: 16px;
+  }
+  
+  *, *:before, *:after {
+    box-sizing: inherit;
+  }
+  
+  body, h1, h2, h3, h4, h5, h6, p, ol, ul {
+    margin: 0;
+    padding: 0;
+    font-weight: normal;
+  }
+  
+  ol, ul {
+    list-style: none;
+  }
+  
+  img {
+    max-width: 100%;
+    height: auto;
+  }
+
+/*#endregion*/
+
+
+#app {
+    padding: 2rem;
+    background-color: seashell;
+    font-family: Helvetica, sans-serif;
+
+}
+
+
+button {
+    padding: .4rem;
+    background-color: snow;
+    border-radius: .5rem;
+}
 .error {
     color: red;
     font-size: 3rem;
@@ -12,4 +53,11 @@
     border: 5px solid rgb(43, 255, 0);
     padding: .5rem;
     border-radius: 1rem;
+}
+
+.blog {
+    color: black;
+    border: 1px solid black;
+    margin: .5rem;
+    padding: 1rem;
 }
