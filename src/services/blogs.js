@@ -1,5 +1,5 @@
 import axios from 'axios';
-const baseUrl = '/api/blogs';
+const baseUrl = '/api/blogs/';
 
 let token = null;
 
@@ -18,4 +18,16 @@ const getAll = () => {
 	return request.then((response) => response.data);
 };
 
-export default { getAll, create, setToken };
+//todo this is not running the function on the backend?
+const updateBlog = async (id, updatedBlog) => {
+	console.log(baseUrl + id);
+	const response = await axios.put(baseUrl + id, updatedBlog);
+
+	//logging response
+	console.log('######', 'VARIABLE NAME:', 'response', 'TYPEOF:', typeof response, 'VALUE:', response, '######');
+	//end of logging
+
+	return response;
+};
+
+export default { getAll, create, setToken, updateBlog };

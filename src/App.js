@@ -61,6 +61,16 @@ const App = () => {
 		setNotificationWithTimeout(`${newBlog.title} saved to database.`);
 	};
 
+	const handleUpdateBlog = async (id, blog) => {
+		const returnedBlog = await blogsService.updateBlog(id, blog);
+
+		setBlogs(
+			blogs.map((blog) => {
+				return blog.id !== id ? blog : returnedBlog.data;
+			})
+		);
+	};
+
 	//helper functions
 
 	const setNotificationWithTimeout = (message) => {
@@ -108,7 +118,7 @@ const App = () => {
 				{user.name} logged in. <button onClick={handleLogout}>Log Out</button>
 			</h3>
 			{blogs.map((blog) => (
-				<Blog key={blog.id} blog={blog} />
+				<Blog key={blog.id} blog={blog} handleClick={handleUpdateBlog} />
 			))}
 		</div>
 	);
