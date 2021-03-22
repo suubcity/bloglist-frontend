@@ -6,6 +6,7 @@ const login = async (username, password) => {
 		username,
 		password,
 	};
+	console.log('logging in');
 	const response = await axios.post(baseUrl, userObject);
 	return response.data;
 };

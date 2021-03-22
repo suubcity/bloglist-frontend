@@ -32,7 +32,8 @@ const App = () => {
 		}
 	}, []);
 	//event handlers
-	const handleLogin = async () => {
+	const handleLogin = async (e) => {
+		e.preventDefault();
 		try {
 			const user = await loginService.login(username, password);
 
