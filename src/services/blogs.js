@@ -18,16 +18,18 @@ const getAll = () => {
 	return request.then((response) => response.data);
 };
 
-//todo this is not running the function on the backend?
 const updateBlog = async (id, updatedBlog) => {
 	console.log(baseUrl + id);
 	const response = await axios.put(baseUrl + id, updatedBlog);
+	return response;
+};
 
-	//logging response
-	console.log('######', 'VARIABLE NAME:', 'response', 'TYPEOF:', typeof response, 'VALUE:', response, '######');
-	//end of logging
+const deleteBlog = async (id) => {
+	const config = { headers: { Authorization: token } };
+
+	const response = await axios.delete(baseUrl + id, config);
 
 	return response;
 };
 
-export default { getAll, create, setToken, updateBlog };
+export default { getAll, create, setToken, updateBlog, deleteBlog };

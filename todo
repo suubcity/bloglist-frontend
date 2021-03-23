@@ -1,6 +1,19 @@
+fullstack content
+The confirmation dialog for deleting a blog post is easy to implement with the window.confirm function.
 
-need to create a form to create new blogs
+Show the button for deleting a blog post only if the blog post was added by the user.
 
+add  delete button to blogs.
 
+conditionlly display it only if user created the blog
 
+take user ID from the blog and use it to search the db, if the returned database user matches the logged in user then display delete.
 
+handle delete fuction must
+send token to backend
+send id to backend
+
+find one and delete
+return deleted thing
+update state
+confirm deletion in notification.

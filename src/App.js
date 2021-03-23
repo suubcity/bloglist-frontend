@@ -71,6 +71,14 @@ const App = () => {
 		);
 	};
 
+	const handleDeleteBlog = async (blogToDelete) => {
+		if (window.confirm(`Are you sure you want to delete ${blogToDelete.title} by ${blogToDelete.author}?`)) {
+			await blogsService.deleteBlog(blogToDelete.id);
+			setBlogs(blogs.filter((blog) => blog.id !== blogToDelete.id));
+			setNotificationWithTimeout(`${blogToDelete.title} by ${blogToDelete.author} deleted`);
+		}
+	};
+
 	//helper functions
 
 	const setNotificationWithTimeout = (message) => {
@@ -122,7 +130,13 @@ const App = () => {
 					{user.name} logged in. <button onClick={handleLogout}>Log Out</button>
 				</h3>
 				{sortedBlogs.map((blog) => (
-					<Blog key={blog.id} blog={blog} handleClick={handleUpdateBlog} />
+					<Blog
+						key={blog.id}
+						blog={blog}
+						user={user}
+						handleUpdateBlog={handleUpdateBlog}
+						handleDeleteBlog={handleDeleteBlog}
+					/>
 				))}
 			</div>
 		);
