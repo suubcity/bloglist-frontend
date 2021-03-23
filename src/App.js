@@ -110,18 +110,23 @@ const App = () => {
 		</form>
 	);
 
-	const mainPage = () => (
-		<div>
-			<h2>blogs</h2>
-			{blogForm()}
-			<h3>
-				{user.name} logged in. <button onClick={handleLogout}>Log Out</button>
-			</h3>
-			{blogs.map((blog) => (
-				<Blog key={blog.id} blog={blog} handleClick={handleUpdateBlog} />
-			))}
-		</div>
-	);
+	const mainPage = () => {
+		const sortedBlogs = blogs.sort((a, b) => {
+			return b.likes - a.likes;
+		});
+		return (
+			<div>
+				<h2>blogs</h2>
+				{blogForm()}
+				<h3>
+					{user.name} logged in. <button onClick={handleLogout}>Log Out</button>
+				</h3>
+				{sortedBlogs.map((blog) => (
+					<Blog key={blog.id} blog={blog} handleClick={handleUpdateBlog} />
+				))}
+			</div>
+		);
+	};
 
 	const blogForm = () => (
 		<Togglable buttonLabel={'Add blog'}>
