@@ -8,23 +8,6 @@ const Blog = ({ blog, handleUpdateBlog, handleDeleteBlog, user }) => {
 	};
 
 	const deleteButtonVisible = () => {
-		//logging blog.user
-		console.log(
-			'######',
-			'VARIABLE NAME:',
-			'blog.user',
-			'TYPEOF:',
-			typeof blog.user,
-			'VALUE:',
-			blog.user,
-			'######'
-		);
-		//end of logging
-
-		//logging user.id
-		console.log('######', 'VARIABLE NAME:', 'user.id', 'TYPEOF:', typeof user.id, 'VALUE:', user.id, '######');
-		//end of logging
-
 		return blog.user.id === user.id;
 	};
 
