@@ -16,10 +16,12 @@ describe('<Blog />', () => {
 
 	const user = { username: 'blogUser', name: 'Mr Thomas', id: '604695ca95fa8f622392a117' };
 
+	const mockHandler = jest.fn();
+
 	let component;
 
 	beforeEach(() => {
-		component = render(<Blog blog={blog} user={user} />);
+		component = render(<Blog blog={blog} handleUpdateBlog={mockHandler} user={user} />);
 	});
 
 	test('renders blog title and author only', () => {
@@ -38,5 +40,14 @@ describe('<Blog />', () => {
 		const showWhenVisible = component.container.querySelector('.showWhenVisible');
 
 		expect(showWhenVisible).not.toHaveStyle('display: none');
+	});
+
+	test('when like button is click twice it calls event handler twice', () => {
+		const button = component.container.querySelector('.likeButton');
+
+		fireEvent.click(button);
+		fireEvent.click(button);
+
+		expect(mockHandler.mock.calls).toHaveLength(2);
 	});
 });
