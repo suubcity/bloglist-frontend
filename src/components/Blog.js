@@ -18,9 +18,9 @@ const Blog = ({ blog, handleUpdateBlog, handleDeleteBlog, user }) => {
 	return (
 		<div className="blog">
 			title: {blog.title}
+			<br />
+			author: {blog.author}
 			<Togglable buttonLabel={'view'} secondButtonLabel={'hide'}>
-				author: {blog.author}
-				<br />
 				url: {blog.url}
 				<br />
 				likes: {blog.likes}
